@@ -68,42 +68,41 @@
         -->
 
         <div id="main-container" class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                <h2>登録</h2>
-                <form class="form-horizontal" action='register' method="POST">
-                    
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for='username'>ユーザ名</label>
-                        <div class="col-sm-3">
-                            <input type="text" class='form-control' id='username'
-                                   name='username' value=''/>
-                            <span class="error"></span>
-                        </div>
-                    </div>
-                    
-                    
-                    <div class="form-group ">
-                        <label class="control-label col-sm-2" for='password'>パスワード</label>
-                        <div class="col-sm-4">
-                            <input type="password" class='form-control' id='password'
-                                   name='password' value=''/>
-                            <span class="error"></span>
-                        </div>
-                    </div>
-                    
-                    <input type="hidden" name="csrf_token" value='hj2hLZhJQdxijYVz4mT03QJwSCoX7MUE1EpTHKlYhAA=' />
-                    <div class="form-group">
-                        <div class="col-sm-8 col-sm-offset-2">
-                            <button type="submit" class="btn btn-primary" id="submit">ログイン</button>
-                        </div>
-                    </div>
-                    <% if :isFailed %>
-                        <p>このユーザー名はすでに使われています</p>
-                    <% end %>
-                </form>
-            </div>
-        </div>
+          <div class="row">
+              <div class="col-sm-12">
+                  <h2>登録</h2>
+                  <form class="form-horizontal" action='register' method="POST">
+                      
+                      <div class="form-group">
+                          <label class="control-label col-sm-2" for='username'>ユーザ名</label>
+                          <div class="col-sm-3">
+                              <input type="text" class='form-control' id='username'
+                                     name='username' value=''/>
+                              <span class="error"></span>
+                          </div>
+                      </div>
+                      
+                      
+                      <div class="form-group ">
+                          <label class="control-label col-sm-2" for='password'>パスワード</label>
+                          <div class="col-sm-4">
+                              <input type="password" class='form-control' id='password'
+                                     name='password' value=''/>
+                              <span class="error"></span>
+                          </div>
+                      </div>
+                      
+                      <div class="form-group">
+                          <div class="col-sm-8 col-sm-offset-2">
+                              <button type="submit" class="btn btn-primary" id="submit">ログイン</button>
+                          </div>
+                      </div>
+                      <% if @isFailed %>
+                          <p>このユーザー名はすでに使われています</p>
+                      <% end %>
+                  </form>
+              </div>
+          </div>
         </div>
 
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

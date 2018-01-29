@@ -1,0 +1,25 @@
+.box1 {
+  float: left;
+  width: 20px;
+  height: 20px;
+  background-color: #ebedf0;
+  margin: 2px;
+}
+
+.box2 {
+  width: 20px;
+  height: 20px;
+  background-color: #c6e48b;
+  margin: 2px;
+}
+
+.box3 {
+  width: 20px;
+  height: 20px;
+  background-color: #196127;
+  margin: 2px;
+}
+
+.hoge {
+  padding-right: 120px;
+}

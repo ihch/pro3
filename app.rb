@@ -1,15 +1,14 @@
 require 'sinatra'
 require 'sinatra/reloader'
 require 'mongo'
-
-DB_NAME = "App"
-USER_COL_NAME = "User"
-CLIENT = Mongo::Client.new(["127.0.0.1:27017"], :database => "App")
-DATABASE = CLIENT.database
-USER_COL = CLIENT[USER_COL_NAME]
+require 'mongoid'
+require 'bcrypt'
+require_relative 'user'
 
 configure do
   enable :sessions
+  Mongoid.load!('./config/mongoid.yml', :development)
+  set :public_folder, File.dirname(__FILE__) + '/public'
 end
 
 get '/' do
@@ -17,14 +16,31 @@ get '/' do
 end
 
 get '/index' do
-  if session[:username] then
-    "Hello World<br>#{session[:username]}'s page"
+  if session[:user] then
+    @user_name = session[:user].name
+    for task in Task.where(name: @user_name)
+      p task
+      p task[:name]
+      @task_name = task.task_name
+      @task_log = task.task_log
+      p @task_log
+    end
+
+    #if i @task_name = task[:task_name]
+    #  @task_log = task[:task_log]
+    #else
+    #  task = Task.new(name: @user_name, task_name: "task")
+    #  @task_name = task.task_name
+    #  @task_log = task.task_log
+    #end
+    erb :index
   elsif
     redirect to('/login')
   end
 end
 
 get '/login' do
+  @isFailed = false
   erb :login
   # "you must login"
 end
@@ -38,34 +54,36 @@ post '/login' do
   username = params[:username]
   password = params[:password]
 
-  for i in USER_COL.find() do
-    puts i
+  user = User.authenticate(params[:username], params[:password])
+  if user
+    session[:user] = user
+    redirect to("/index")
+  else
+    @isFailed  = true
+    erb :login
   end
-
-  session[:username] = username
-  session[:password] = password
-
-  "#{username}: #{password}"
 end
 
 get '/register' do
-  erb :register, :isFailed => false
+  @isFailed = false
+  erb :register
 end
 
 post '/register' do
-  username = params[:username]
-  password = params[:password]
+  user = User.new(name: params[:username])
+  user.encrypt_password(params[:password])
+  begin
+    user.save!
+    task = Task.new(name: user.name, task_name: "hage")
 
-  if USER_COL.find({name: username}).count != 0
-    return erb(:register, :isFailed => true)
+    task.save!
+    session[:user] = user
+    redirect to("/index")
+  rescue => e
+    p e
+    @isFailed = true
+    erb :register
   end
-
-  session[:username] = username
-  session[:password] = password
-
-  USER_COL.insert_one({name: username, pass: password})
-
-  redirect to('/index')
 end
 
 get '/hello/:username' do | username |
