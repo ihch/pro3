@@ -1,6 +1,6 @@
+require 'date'
 require 'sinatra'
 require 'sinatra/reloader'
-require 'mongo'
 require 'mongoid'
 require 'bcrypt'
 require_relative 'user'
@@ -18,31 +18,70 @@ end
 get '/index' do
   if session[:user] then
     @user_name = session[:user].name
+    @task_name = []
+    @task_log = []
     for task in Task.where(name: @user_name)
-      p task
-      p task[:name]
-      @task_name = task.task_name
-      @task_log = task.task_log
-      p @task_log
+      @task_name.push(task.task_name)
+      @task_log.push(task.task_log)
     end
-
-    #if i @task_name = task[:task_name]
-    #  @task_log = task[:task_log]
-    #else
-    #  task = Task.new(name: @user_name, task_name: "task")
-    #  @task_name = task.task_name
-    #  @task_log = task.task_log
-    #end
     erb :index
-  elsif
-    redirect to('/login')
+  else
+    redirect to('/welcome')
+  end
+end
+
+get '/home/:username' do
+  if session[:user] then
+    @user_name = session[:user].name
+    @task_name = []
+    @task_log = []
+    for task in Task.where(name: @user_name)
+      @task_name.push(task.task_name)
+      @task_log.push(task.task_log)
+    end
+    erb :home
+  else
+    redirect to('/welcome')
+  end
+end
+
+get '/welcome' do
+  erb :welcome
+end
+
+post '/add_task' do
+  if session[:user] then
+    begin
+      new_task = Task.new(name: session[:user].name, task_name: params[:task_name])
+      new_task.save!
+    rescue => e
+      p e
+    end
+    redirect to("/home/#{session[:user].name}")
+  else
+    redirect to('/welcome')
+  end
+end
+
+post '/do_task' do
+  if session[:user] then
+    today = Date.today()
+    p today.day, today.month
+    p session[:user].name, params[:task_name]
+    task = Task.where(name: session[:user].name, task_name: params[:task_name]).first
+    # p task
+    task.task_log[today.month - 1][today.day - 1] = 1
+    task.save!
+    p task
+    redirect to('/index')
+  else
+    redirect to('/welcome')
   end
 end
 
 get '/login' do
   @isFailed = false
   erb :login
-  # "you must login"
 end
 
 get '/logout' do
@@ -57,7 +96,7 @@ post '/login' do
   user = User.authenticate(params[:username], params[:password])
   if user
     session[:user] = user
-    redirect to("/index")
+    redirect to("/home/#{session[:user].name}")
   else
     @isFailed  = true
     erb :login
@@ -74,11 +113,8 @@ post '/register' do
   user.encrypt_password(params[:password])
   begin
     user.save!
-    task = Task.new(name: user.name, task_name: "hage")
-
-    task.save!
     session[:user] = user
-    redirect to("/index")
+    redirect to("/home/#{session[:user].name}")
   rescue => e
     p e
     @isFailed = true
@@ -86,6 +122,3 @@ post '/register' do
   end
 end
 
-get '/hello/:username' do | username |
-  "Hello #{username}"
-end

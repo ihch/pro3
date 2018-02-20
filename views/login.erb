@@ -7,104 +7,58 @@
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="#">Navbar</a>
+            <a class="navbar-brand" href="#">ぎっちょはぶ</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Dropdown
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled" href="#">Disabled</a>
-                    </li>
-                </ul>
-                <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </form>
+                <% if @user_name %>
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/logout">Logout</a>
+                        </li>
+                    </ul>
+                <% end %>
             </div>
         </nav>
 
-        <!--
-        <form action="login" method="POST">
-            <div>
-                user name: <input type="text" name="username">
-                password: <input type="password" name="password">
-            </div>
-            <div>
-                submit: <input type="submit" value="submit">
-        </form>
-
-        <h1 class="text-center">Let's Log in!</h1>
-
-        <div class="input-group mb-3 row">
-            <ul class="list-inline">
-                <div class="input-group-prepend">
-                    <span class="input-group-text" id="basic-addon1">@</span>
-                </div>
-                <form action="login" method="POST">
-                    <li class="list-inlineitem"><input type="text" class="form-control" name="username" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1"></li>
-                    <li class="list-inlineitem"><input type="password" class="form-control" name="password" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1"></li>
-                    <li class="list-inlineitem"><input type="submit" value="submit"></li>
-                </form>
-            </ul>
-        </div>
-        -->
-
         <div id="main-container" class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                <h2>ログイン</h2>
-                <form class="form-horizontal" action='login' method="POST">
-                    
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for='username'>ユーザ名</label>
-                        <div class="col-sm-3">
-                            <input type="text" class='form-control' id='username'
-                                   name='username' value=''/>
-                            <span class="error"></span>
+            <div class="row">
+                <div class="col-sm-12">
+                    <h2>ログイン</h2>
+                    <form class="form-horizontal" action='login' method="POST">
+                        
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for='username'>ユーザ名</label>
+                            <div class="col-sm-3">
+                                <input type="text" class='form-control' id='username'
+                                       name='username' value=''/>
+                                <span class="error"></span>
+                            </div>
                         </div>
-                    </div>
-                    
-                    
-                    <div class="form-group ">
-                        <label class="control-label col-sm-2" for='password'>パスワード</label>
-                        <div class="col-sm-4">
-                            <input type="password" class='form-control' id='password'
-                                   name='password' value=''/>
-                            <span class="error"></span>
+                        
+                        
+                        <div class="form-group ">
+                            <label class="control-label col-sm-2" for='password'>パスワード</label>
+                            <div class="col-sm-4">
+                                <input type="password" class='form-control' id='password'
+                                       name='password' value=''/>
+                                <span class="error"></span>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <input type="hidden" name="csrf_token" value='hj2hLZhJQdxijYVz4mT03QJwSCoX7MUE1EpTHKlYhAA=' />
-                    <div class="form-group">
-                        <div class="col-sm-8 col-sm-offset-2">
-                            <button type="submit" class="btn btn-primary" id="submit">ログイン</button>
+                        
+                        <div class="form-group">
+                            <div class="col-sm-8 col-sm-offset-2">
+                                <button type="submit" class="btn btn-primary" id="submit">ログイン</button>
+                            </div>
                         </div>
-                    </div>
-                    <% if @isFailed %>
-                        <p>何かが間違っています</p>
-                    <% end %>
-                </form>
+                        <% if @isFailed %>
+                            <p>何かが間違っています</p>
+                        <% end %>
+                    </form>
+                </div>
             </div>
-        </div>
         </div>
 
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
