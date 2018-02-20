@@ -1,0 +1,6 @@
+development:
+  clients:
+    default:
+      database: App
+      hosts:
+        - 127.0.0.1:27017
